@@ -1,4 +1,8 @@
-from stats import get_num_words, get_chars_dict, chars_dict_sorted
+from stats import (
+    get_num_words, 
+    chars_dict_to_sorted_list,
+    get_chars_dict,
+)
 
 def main():
     book_path = "books/frankenstein.txt"
@@ -6,19 +10,24 @@ def main():
     text = get_book_text(book_path)
     num_words = get_num_words(text)
     chars_dict = get_chars_dict(text)
-    sorted_chars = chars_dict_sorted(chars_dict)
-    print(("="*12) + " BOOKBOT " + ("="*12))
-    print("Analyzing book found at books/frankenstein.txt")
-    print(("-"*11) + " Word Count " + ("-"*11))
-    print(f"Found {num_words} total words")
-    print(("-"*9) + " Character Count " + ("-"*9))
-    for d in sorted_chars:
-        if d["char"].isalpha() is True:
-            print(f'{d["char"]}: {d["num"]}')
-    print(("="*13) + " END " + ("="*13))
+    chars_sorted_list = chars_dict_to_sorted_list(chars_dict)
+    print_report(book_path, num_words, chars_sorted_list)
 
 def get_book_text(path):
     with open(path) as f:
         return f.read()
+
+def print_report(book_path, num_words, chars_sorted_list):
+    print("============ BOOKBOT ============")
+    print(f"Analyzing book found at {book_path}...")
+    print("----------- Word Count -----------")
+    print(f"Found {num_words} total words")
+    print("--------- Character Count ---------")
+    for item in chars_sorted_list:
+        if not item["char"].isalpha():
+            continue
+        print(f"{item['char']}: {item['num']}")
+
+    print("============= END =============")
 
 main()
